@@ -3,8 +3,8 @@ WORK IN PROGRESS!! Simple backup script for migrating mailboxes
 
 ## How to install?
 
-```composer require bramhammer/imap-backup-dovecot```
-Edit config.json
+```composer require bramhammer/imap-backup-dovecot```  
+Edit config.json  
 ```php migrate.php```
 
 ## Issues?
