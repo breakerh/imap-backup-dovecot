@@ -1,0 +1,12 @@
+{
+"sourceHost": "",
+"sourceUsername": "",
+"sourcePassword": "",
+"sourcePort": 993,
+"sourceCheckSSL": false,
+"destinationHost": "",
+"destinationUsername": "",
+"destinationPassword": "",
+"destinationPort": 993,
+"destinationCheckSSL": false
+}
