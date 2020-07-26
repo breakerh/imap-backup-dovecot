@@ -10,3 +10,6 @@ Edit config.json
 
 ## Issues?
 Please post them in the issue list, i will try to solve them as quickly as possible!
+
+## Todo's
+- no foreach error on empty accounts or mailboxes
