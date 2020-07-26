@@ -1,0 +1,16 @@
+{
+    "name": "bramhammer/imap-backup-dovecot",
+    "type": "project",
+    "description": "Simple command line backup tool",
+    "keywords": [
+      "symfony",
+      "commandline",
+      "dovecot",
+      "backup",
+      "mail"
+    ],
+    "license": "MIT",
+    "require": {
+        "symfony/console": "^5.1"
+    }
+}

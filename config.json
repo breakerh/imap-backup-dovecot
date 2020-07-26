@@ -1,0 +1,12 @@
+{
+  "sourceHost":"mail.mijndomein.nl",
+  "sourceUsername":"dev@b-visually.com",
+  "sourcePassword":"pCS2EczPLh!pCS2EczPLh",
+  "sourcePort":993,
+  "sourceCheckSSL":false,
+  "destinationHost":"server.fullstak.nl",
+  "destinationUsername":"dev@b-visually.com",
+  "destinationPassword":"pCS2EczPLh",
+  "destinationPort":993,
+  "destinationCheckSSL":false
+}
