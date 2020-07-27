@@ -42,17 +42,6 @@
 					return $box;
 				}
 			}
-			/*function BoxCheck(OutputInterface $output,$box){
-				if(!($boxData = imap_check($box))){
-					$output->writeln("<error>Error: ".imap_last_error()."</error>");
-					die;
-				}else{
-					
-					$output->writeln("Mailbox  check".$box->Mailbox." OKE", OutputInterface::VERBOSITY_DEBUG);
-					$output->writeln($box->Nmsgs." messages", OutputInterface::VERBOSITY_VERBOSE);
-					return $boxData->Nmsgs;
-				}
-			}*/
 			
 			
 			// base variables
@@ -79,9 +68,11 @@
 			$output->writeln("<question>Config extended with default config:</question>\n<comment>".print_r($config,true)."</comment>",OutputInterface::VERBOSITY_DEBUG);
 			$output->writeln("<info>Connecting to Mailbox...</info>",OutputInterface::VERBOSITY_VERBOSE);
 			
+			// connect to mailboxes
 			$oldMailBox = BoxConnect($output,$config['sourceHost'],$config['sourcePort'],$config['path'],$config['sourceUsername'],$config['sourcePassword'],$config['sourceCheckSSL']);
 			$newMailBox = BoxConnect($output,$config['destinationHost'],$config['destinationPort'],$config['path'],$config['destinationUsername'],$config['destinationPassword'],$config['destinationCheckSSL']);
 
+			// count items in mailbox (not always accurate since archives and sometimes trash isn't counted)
 			$oldcount = imap_num_msg($oldMailBox);
 			$newcount = imap_num_msg($newMailBox);
 			$output->writeln("<info> Old mailbox:".$oldcount."; New mailbox:".$newcount."</info>",OutputInterface::VERBOSITY_VERBOSE);
@@ -89,15 +80,12 @@
 			if($input->getArgument('onlycount')!==NULL)
 				die();
 			
+			// get all folders
 			$output->writeln("<info>Gathering old folders...</info>",OutputInterface::VERBOSITY_VERBOSE);
 			$oldFolders = imap_listmailbox($oldMailBox, getRef($config['sourceHost'],$config['sourcePort'],$config['sourceCheckSSL']), "*");
 			$newFolders = array_map(function($_box){$s = explode('}',$_box);return imap_utf7_decode(end($s));},imap_listmailbox($newMailBox, getRef($config['destinationHost'],$config['destinationPort'],$config['destinationCheckSSL']), "*"));
-			$startSeq = 1;
-			$endSeq = (is_numeric($oldcount))?$oldcount:10; // just to be sure
-			$startUID = imap_uid($oldMailBox,$startSeq);
-			$endUID = imap_uid($oldMailBox,$endSeq);
 			
-			$output->writeln("<info>Starting migration of ~".$endSeq." mails</info>", OutputInterface::VERBOSITY_VERBOSE);
+			$output->writeln("<info>Starting migration of ~".$oldcount." mails</info>", OutputInterface::VERBOSITY_VERBOSE);
 			foreach($oldFolders as $_box){
 				$folder = imap_utf7_decode(str_replace(getRef($config['sourceHost'],$config['sourcePort'],$config['sourceCheckSSL']),'',$_box));
 				if(!in_array($folder,$newFolders)){
@@ -114,12 +102,9 @@
 					$pfx = "Msg #$_mail";
 					$output->writeln("<info>Gather ".$pfx." from ".$folder.".</info>",OutputInterface::VERBOSITY_DEBUG);
 					
-					//$h = imap_header($oldMailBox, $_mail);
 					$fh = imap_fetchheader($oldMailBox, $_mail);
 					$fb = imap_body($oldMailBox, $_mail);
 					$message = $fh.$fb;
-					//$msgUID = imap_uid($oldMailBox,$_mail);
-					//$struct = imap_fetchstructure ($oldMailBox, $_mail);
 					
 					if (!($ret = imap_append($newMailBox,getRef($config['destinationHost'],$config['destinationPort'],$config['destinationCheckSSL']).$folder,$message))) {
 						$output->writeln("<error>Couldn't move message! Got message:</error>");
