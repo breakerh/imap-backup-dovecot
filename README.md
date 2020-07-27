@@ -1,4 +1,4 @@
-# imap-backup-dovecot
+# Imap Backup Dovecot
 Simple yet effective backup script for migrating mailboxes
 
 ## How to install?
